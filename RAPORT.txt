@@ -1,0 +1,59 @@
+
+int A[10] = {1, 2, 3, 4, 5, 6, 7, 8, 9, 10};
+int sum = 0;
+for( int i = 0; i < 10; i++ )
+{
+A[i] = A[i] + 2;
+sum = sum + A[i];
+}
+
+
+
+0: add $1,$0,$0       # i = 0, contorul buclei
+1: addi $4,$0,10      # se salvează numărul maxim de iterații (10)
+2: add $2,$0,$0       # inițializarea indexului locației de memorie
+3:add $5,$0,$0        # sum = 0
+4:beq $1,$4,7         # s-au făcut 10 iterații? dacă da, salt în afara buclei
+5:lw $3,1($2)        # în $3 se aduce elementul curent din șir
+6:addi $3,$3,2        # $3 = $3 + 2
+7:sw $3,1($2)        # salvarea noii valori $3 în elementul curent din șir
+8:add $5,$5,$3        # se adună la suma parțială din $5 elementul curent
+9:addi $2,$2,1        # indexul următorului element din șir ??de ce nu +1
+10:addi $1,$1,1       # i = i + 1, actualizarea contorului buclei
+11: j 4               # salt începutul buclei
+12:sw $5,10($0)       # salvarea sumei în memorie la adresa 10
+
+B"000_000_000_001_0_000", --"0010"
+B"001_000_100_0001010", --"220A"
+B"000_000_000_010_0_000",--"0020"
+B"000_000_000_101_0_000",--"0050"
+B"011_001_100_0000111",--"6607"
+B"010_010_011_0000001",--"4981"
+B"001_011_011_0000010",--"2D82"
+B"011_010_011_0000001",--"6981"
+B"000_101_011_101_0_000",--"15D0"
+B"001_010_010_0000001",--"2901"
+B"001_001_001_0000001",--"2481"
+B"111_0000000000100",--"E004"
+B"011_000_101_0001010",--"628A"
+
+
+Prima bucla:
+
+B"000_000_000_001_0_000", --"0010"       Instruction:"0010",Pcin="0001",RD1="0000",RD2="0000",ALURes="0000"
+B"001_000_100_0001010", --"220A"         Instruction:"220A",Pcin="0002",RD1="0000",RD2="000A",ALURes="000A"
+B"000_000_000_010_0_000",--"0020"        Instruction:"0020",Pcin="0003",RD1="0000",RD2="0000",ALURes="0000"
+B"000_000_000_101_0_000",--"0050"        Instruction:"0050",Pcin="0004",RD1="0000",RD2="0000",ALURes="0000"
+B"011_001_100_0000111",--"6607"          Instruction:"6607",Pcin="0005",RD1="0000",RD2="000A",ALURes="0007"
+B"010_010_011_0000001",--"4981"          Instruction:"4981",Pcin="0006",RD1="0000",RD2="0010",ALURes="0001",WD="0001"
+B"001_011_011_0000010",--"2D82"          Instruction:"2D82",Pcin="0007",RD1="0001",RD2="0001",ALURes="0003",Ext_Imm="0002"
+B"011_010_011_0000001",--"6981"          Instruction:"6981",Pcin="0008",RD1="0000",RD2="0003",ALURes="0001",Ext_Imm="0001"
+B"000_101_011_101_0_000",--"15D0"        Instruction:"15D0",Pcin="0009",RD1="0000",RD2="0003",ALURes="0003",Ext_Imm="0050"
+B"001_010_010_0000001",--"2901"          Instruction:"2901",Pcin="000A",RD1="0000",RD2="0000",ALURes="0001",Ext_Imm="0001"
+B"001_001_001_0000001",--"2481"          Instruction:"2481",Pcin="000B",RD1="0000",RD2="0000",ALURes="0001",Ext_Imm="0001"
+B"111_0000000000100",--"E004"            Instruction:"E004",Pcin="000C",RD1="0000",RD2="0000",ALURes="0000",Ext_Imm="0004"
+B"011_000_101_0001010",--"628A"        
+
+Am testat pe placuta si functioneaza relativ bine,doar la instructiunea beq,imi ia immediatul extins in loc de RD2. (Asa era la ultima testare de la laborator).De atunci am mai facut modificari,aveam ALUSrc=1 si trebuia 0,dar nu
+am mai apucat sa testez pe placuta.
+
